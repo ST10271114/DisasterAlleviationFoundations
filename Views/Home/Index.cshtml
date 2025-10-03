@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Home - Disaster Alleviation Foundations";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Disaster Alleviation Foundations</h1>
+    <p class="lead">Together we can make a difference in times of crisis.</p>
+    <p>Support communities by donating resources, reporting incidents, and volunteering.</p>
+</div>
+
+<hr />
+
+<div class="row text-center mt-4">
+    <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+            <div class="card-body">
+                <h5 class="card-title">User Registration & Login</h5>
+                <p class="card-text">Create an account, log in, and manage your profile securely.</p>
+                <a href="/Identity/Account/Login" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+            <div class="card-body">
+                <h5 class="card-title">Disaster Incident Reporting</h5>
+                <p class="card-text">Submit reports of disasters or emergencies in your area.</p>
+                <a href="/IncidentReports/Create" class="btn btn-danger">Report Now</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+            <div class="card-body">
+                <h5 class="card-title">Resource Donation</h5>
+                <p class="card-text">Donate food, clothing, and medical supplies to those in need.</p>
+                <a href="/Donations/Create" class="btn btn-success">Donate</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-lg border-0">
+            <div class="card-body">
+                <h5 class="card-title">Volunteer Management</h5>
+                <p class="card-text">Register, browse available tasks, and join relief efforts.</p>
+                <a href="/VolunteerTasks/Index" class="btn btn-info">Join Us</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="container text-center mt-5">
+    <h3>Our Impact</h3>
+    <p>Tracking the difference we make together:</p>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <h4 class="text-success">150+</h4>
+            <p>Donations Made</p>
+        </div>
+        <div class="col-md-4">
+            <h4 class="text-info">80+</h4>
+            <p>Active Volunteers</p>
+        </div>
+        <div class="col-md-4">
+            <h4 class="text-danger">30+</h4>
+            <p>Incidents Reported</p>
+        </div>
+    </div>
+</div>
+
+<footer class="footer mt-5 py-3 bg-light text-center">
+    <div class="container">
+        <span class="text-muted">© 2025 - DisasterAlleviationFoundations | <a href="/Home/Privacy">Privacy</a></span>
+    </div>
+</footer>

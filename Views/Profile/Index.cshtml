@@ -1,0 +1,116 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h2>My Profile</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="UpdateProfile" method="post">
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input class="form-control" asp-for="User.FullName" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input class="form-control" asp-for="User.Email" />
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+
+<hr />
+
+<h3>My Incident Reports</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Date Reported</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.IncidentReports != null && Model.IncidentReports.Any())
+        {
+            foreach (var incident in Model.IncidentReports)
+            {
+                <tr>
+                    <td>@incident.Title</td>
+                    <td>@incident.Description</td>
+                    <td>@incident.Location</td>
+                    <td>@incident.DateReported.ToShortDateString()</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="4" class="text-muted">No incident reports yet.</td></tr>
+        }
+    </tbody>
+</table>
+
+<h3>My Donations</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Resource Type</th>
+            <th>Quantity</th>
+            <th>Date Donated</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Donations != null && Model.Donations.Any())
+        {
+            foreach (var donation in Model.Donations)
+            {
+                <tr>
+                    <td>@donation.ResourceType</td>
+                    <td>@donation.Quantity</td>
+                    <td>@donation.DateDonated.ToShortDateString()</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="3" class="text-muted">No donations yet.</td></tr>
+        }
+    </tbody>
+</table>
+
+<h3>My Volunteer Tasks</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Task Name</th>
+            <th>Description</th>
+            <th>Due Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.VolunteerTasks != null && Model.VolunteerTasks.Any())
+        {
+            foreach (var task in Model.VolunteerTasks)
+            {
+                <tr>
+                    <td>@task.TaskName</td>
+                    <td>@task.Description</td>
+                    <td>@task.DueDate.ToShortDateString()</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="3" class="text-muted">No volunteer tasks yet.</td></tr>
+        }
+    </tbody>
+</table>
