@@ -1,66 +1,58 @@
-﻿using DisasterAlleviationFoundations.Data;
-using DisasterAlleviationFoundations.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DisasterAlleviationFoundations.Data;
+using DisasterAlleviationFoundations.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
-public class ProfileController : Controller
+namespace DisasterAlleviationFoundations.Controllers
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ApplicationDbContext _context;
-
-    public ProfileController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+    [Authorize]
+    public class ProfileController : Controller
     {
-        _userManager = userManager;
-        _context = context;
-    }
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-    public async Task<IActionResult> Index()
-    {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
+        public ProfileController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
-            return RedirectToAction("Login", "Account");
+            _userManager = userManager;
+            _context = context;
         }
 
-        var model = new ProfileViewModel
+        [AllowAnonymous]
+        public async Task<IActionResult> Index()
         {
-            User = user,
-            IncidentReports = await _context.IncidentReports
-                                .Where(i => i.UserId == user.Id)
-                                .ToListAsync() ?? new List<IncidentReport>(),
-            Donations = await _context.Donations
-                                .Where(d => d.UserId == user.Id)
-                                .ToListAsync() ?? new List<Donation>(),
-            VolunteerTasks = await _context.VolunteerTasks
-                                .Where(t => t.UserId == user.Id)
-                                .ToListAsync() ?? new List<VolunteerTask>()
-        };
+            // Redirect unauthenticated users immediately
+            if (User?.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return Redirect("/Account/Login");
+            }
 
-        return View(model);
-    }
+            // Safe retrieval of authenticated user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Redirect("/Account/Login");
+            }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
-    {
-        if (!ModelState.IsValid) return View("Index", model);
+            // Minimal database usage after authentication
+            var model = new ProfileViewModel
+            {
+                User = user,
+                IncidentReports = await _context.IncidentReports
+                                    .Where(i => i.UserId == user.Id)
+                                    .ToListAsync(),
+                Donations = await _context.Donations
+                                    .Where(d => d.UserId == user.Id)
+                                    .ToListAsync(),
+                VolunteerTasks = await _context.VolunteerTasks
+                                    .Where(t => t.UserId == user.Id)
+                                    .ToListAsync()
+            };
 
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return RedirectToAction("Login", "Account");
+            return View(model);
         }
-
-        user.FullName = model.User.FullName;
-        user.Email = model.User.Email;
-        user.UserName = model.User.Email;
-
-        var result = await _userManager.UpdateAsync(user);
-
-        TempData["Message"] = result.Succeeded
-            ? "Profile updated successfully!"
-            : "Failed to update profile.";
-
-        return RedirectToAction("Index");
     }
 }
